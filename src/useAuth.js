@@ -30,26 +30,27 @@ const useAuth = (code) => {
 
   useEffect(() => {
     if (!refreshToken || !expiresIn) return;
-    // Refresh if token is close to expiration
-    axios
-      .post('http://localhost:3001/refresh', {
-        refreshToken,
-      })
-      .then((res) => {
-        // setAccessToken(res.data.access_token);
-        // setRefreshToken(res.data.refresh_token);
-        // setExpiresIn(res.data.expires_in);
-        // // Remove 'code' from URL
-        // window.history.pushState({}, null, '/');
-      })
-      .catch((error) => {
-        if (!error.response) {
-          console.log('network error from refresh');
-        } else {
-          console.log('other error from refresh');
-        }
-        window.location = '/';
-      });
+    const interval = setInterval(() => {
+      // Refresh only if token is close to expiration
+      axios
+        .post('http://localhost:3001/refresh', {
+          refreshToken,
+        })
+        .then((res) => {
+          setAccessToken(res.data.access_token);
+          setExpiresIn(res.data.expires_in);
+        })
+        .catch((error) => {
+          if (!error.response) {
+            console.log('network error from refresh');
+          } else {
+            console.log('other error from refresh');
+          }
+          window.location = '/';
+        });
+    }, (expiresIn - 60) * 1000);
+
+    return () => clearInterval(interval);
   }, [refreshToken, expiresIn]);
 
   return accessToken;
