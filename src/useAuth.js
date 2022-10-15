@@ -12,7 +12,10 @@ const useAuth = (code) => {
         code,
       })
       .then((res) => {
-        console.log(res.data);
+        setAccessToken(res.data.access_token);
+        setRefreshToken(res.data.refresh_token);
+        setExpiresIn(res.data.expires_in);
+        // Remove 'code' from URL
         window.history.pushState({}, null, '/');
       })
       .catch((error) => {
@@ -21,8 +24,11 @@ const useAuth = (code) => {
         } else {
           console.log('other error');
         }
+        window.location = '/';
       });
   }, [code]);
+
+  return accessToken;
 };
 
 export default useAuth;
