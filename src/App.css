@@ -26,3 +26,9 @@ main {
   border: 1px solid gray;
   width: 500px;
 }
+
+.results {
+  flex: 1;
+  background: lightgreen;
+  overflow-y: auto;
+}

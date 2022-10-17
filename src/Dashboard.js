@@ -1,9 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import SpotifyWebApi from 'spotify-web-api-node';
 import useAuth from './useAuth';
+import axios from 'axios';
+
+const spotifyApi = new SpotifyWebApi({
+  clientId: '3d8c865e52ed4544b848fe4de836158d',
+});
 
 const Dashboard = ({ code }) => {
   const accessToken = useAuth(code);
   const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    // Use access token for queries
+    if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (!search) return setSearchResults([]);
+    if (!accessToken) return;
+    console.log(`access token: ${accessToken}`);
+
+    // Perform search query
+    // spotifyApi
+    //   .searchTracks(search)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((error) => console.log(error));
+    console.log(`preparing to fetch data for ${search}`);
+    spotifyApi.searchTracks(search).then((res) => {
+      setSearchResults(
+        res.body.tracks.items.map((track) => {
+          const smallestAlbumImage = track.album.images.reduce(
+            (smallest, image) => {
+              if (image.height < smallest.height) return image;
+              return smallest;
+            },
+            track.album.images[0]
+          );
+          return {
+            artist: track.artists[0].name,
+            title: track.name,
+            uri: track.uri,
+            albumUrl: smallestAlbumImage.url,
+          };
+        })
+      );
+    });
+  }, [search, accessToken]);
 
   return (
     <main>
@@ -20,6 +67,7 @@ const Dashboard = ({ code }) => {
       <section className="results">
         <h1>Results</h1>
       </section>
+      <div>Bottom</div>
     </main>
   );
 };
