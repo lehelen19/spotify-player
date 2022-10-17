@@ -11,6 +11,7 @@ const Dashboard = ({ code }) => {
   const accessToken = useAuth(code);
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  console.log(searchResults);
 
   useEffect(() => {
     // Use access token for queries
@@ -24,14 +25,9 @@ const Dashboard = ({ code }) => {
     console.log(`access token: ${accessToken}`);
 
     // Perform search query
-    // spotifyApi
-    //   .searchTracks(search)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((error) => console.log(error));
-    console.log(`preparing to fetch data for ${search}`);
+    let cancel = false;
     spotifyApi.searchTracks(search).then((res) => {
+      if (cancel) return;
       setSearchResults(
         res.body.tracks.items.map((track) => {
           const smallestAlbumImage = track.album.images.reduce(
@@ -41,6 +37,7 @@ const Dashboard = ({ code }) => {
             },
             track.album.images[0]
           );
+
           return {
             artist: track.artists[0].name,
             title: track.name,
@@ -50,6 +47,7 @@ const Dashboard = ({ code }) => {
         })
       );
     });
+    return () => (cancel = true);
   }, [search, accessToken]);
 
   return (
