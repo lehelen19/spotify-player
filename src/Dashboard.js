@@ -3,6 +3,7 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import useAuth from './useAuth';
 import axios from 'axios';
 import TrackSearchResult from './TrackSearchResult';
+import Player from './Player';
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '3d8c865e52ed4544b848fe4de836158d',
@@ -12,7 +13,12 @@ const Dashboard = ({ code }) => {
   const accessToken = useAuth(code);
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  console.log(searchResults);
+  const [playingTrack, setPlayingTrack] = useState();
+
+  const chooseTrack = (track) => {
+    setPlayingTrack(track);
+    setSearch('');
+  };
 
   useEffect(() => {
     // Use access token for queries
@@ -23,7 +29,6 @@ const Dashboard = ({ code }) => {
   useEffect(() => {
     if (!search) return setSearchResults([]);
     if (!accessToken) return;
-    console.log(`access token: ${accessToken}`);
 
     // Perform search query
     let cancel = false;
@@ -66,8 +71,15 @@ const Dashboard = ({ code }) => {
       <section className="results">
         <h1>Results</h1>
         {searchResults.map((track) => (
-          <TrackSearchResult track={track} key={track.uri} />
+          <TrackSearchResult
+            track={track}
+            key={track.uri}
+            chooseTrack={chooseTrack}
+          />
         ))}
+        <div>
+          <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
+        </div>
       </section>
     </main>
   );
