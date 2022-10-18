@@ -4,7 +4,6 @@ body {
 
 main {
   height: 100vh;
-  background: lightyellow;
   display: flex;
   flex-direction: column;
 }
@@ -28,19 +27,33 @@ main {
   padding: 10px;
 }
 
-.search {
-  background: lightblue;
-}
-
 .search input {
   font-size: 20px;
   border-radius: 5px;
-  border: 1px solid gray;
+  border: 1px solid rgb(128, 128, 128);
   width: 500px;
 }
 
 .results {
   flex: 1;
-  background: lightgreen;
   overflow-y: auto;
+}
+
+.track-results {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.track-title {
+  font-size: 18px;
+}
+
+.album-image {
+  margin: 10px;
+  border: 1px solid gray;
+}
+
+.track-artist {
+  color: gray;
 }

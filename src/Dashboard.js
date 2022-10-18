@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import SpotifyWebApi from 'spotify-web-api-node';
 import useAuth from './useAuth';
 import axios from 'axios';
+import TrackSearchResult from './TrackSearchResult';
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '3d8c865e52ed4544b848fe4de836158d',
@@ -64,8 +65,10 @@ const Dashboard = ({ code }) => {
       </div>
       <section className="results">
         <h1>Results</h1>
+        {searchResults.map((track) => (
+          <TrackSearchResult track={track} key={track.uri} />
+        ))}
       </section>
-      <div>Bottom</div>
     </main>
   );
 };
