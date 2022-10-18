@@ -17,7 +17,6 @@ const Dashboard = ({ code }) => {
 
   const chooseTrack = (track) => {
     setPlayingTrack(track);
-    setSearch('');
   };
 
   useEffect(() => {
@@ -68,6 +67,10 @@ const Dashboard = ({ code }) => {
           />
         </label>
       </div>
+      <div className="player">
+        <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
+      </div>
+      <hr />
       <section className="results">
         <h1>Results</h1>
         {searchResults.map((track) => (
@@ -77,9 +80,6 @@ const Dashboard = ({ code }) => {
             chooseTrack={chooseTrack}
           />
         ))}
-        <div>
-          <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
-        </div>
       </section>
     </main>
   );
