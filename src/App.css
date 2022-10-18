@@ -9,10 +9,22 @@ main {
   flex-direction: column;
 }
 
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
 .login-btn {
+  display: block;
+  width: 150px;
+  text-align: center;
   text-decoration: none;
   color: white;
-  background-color: rgb(130, 235, 130);
+  background-color: rgb(57, 136, 57);
+  border: 2px solid darkgreen;
+  border-radius: 5px;
   padding: 10px;
 }
 

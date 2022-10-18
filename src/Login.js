@@ -14,9 +14,11 @@ user-modify-playback-state`;
 
 const Login = () => {
   return (
-    <a className="login-btn" href={AUTH_URL}>
-      Login with Spotify
-    </a>
+    <div className="login-container">
+      <a className="login-btn" href={AUTH_URL}>
+        Login with Spotify
+      </a>
+    </div>
   );
 };
 
